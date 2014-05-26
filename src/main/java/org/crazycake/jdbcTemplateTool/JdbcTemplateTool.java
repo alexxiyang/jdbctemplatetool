@@ -35,7 +35,7 @@ public class JdbcTemplateTool {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public <T> List<T> list(String sql, Object[] params, Class<T> clazz) {
-
+				
 		List<T> list = null;
 		if (params == null || params.length == 0) {
 			list = jdbcTemplate.query(sql, new BeanPropertyRowMapper(clazz));
