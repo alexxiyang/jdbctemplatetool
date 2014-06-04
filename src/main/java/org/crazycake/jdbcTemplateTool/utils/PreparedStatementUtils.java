@@ -126,9 +126,14 @@ public class PreparedStatementUtils {
 	 * @return
 	 */
 	private static <T> String getTableName(Class<T> clazz) {
+		
 		Table tableAnno = clazz.getAnnotation(Table.class);
-		String tableName = tableAnno.name();
-		return tableName;
+		if(tableAnno != null){
+			return tableAnno.name();
+		}
+		//if Table annotation is null
+		String className = clazz.getName();
+		return CamelNameUtils.camel2underscore(className.substring(className.lastIndexOf(".")+1));
 	}
 	
 	
