@@ -4,7 +4,7 @@
 
   <groupId>org.crazycake</groupId>
   <artifactId>jdbctemplatetool</artifactId>
-  <version>1.0.2-RELEASE</version>
+  <version>1.0.3-RELEASE</version>
   <packaging>jar</packaging>
 
   <name>jdbctemplatetool</name>

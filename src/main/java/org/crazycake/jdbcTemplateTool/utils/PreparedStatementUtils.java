@@ -129,6 +129,9 @@ public class PreparedStatementUtils {
 		
 		Table tableAnno = clazz.getAnnotation(Table.class);
 		if(tableAnno != null){
+			if(tableAnno.catalog() != null){
+				return tableAnno.catalog() + "." + tableAnno.name();
+			}
 			return tableAnno.name();
 		}
 		//if Table annotation is null
