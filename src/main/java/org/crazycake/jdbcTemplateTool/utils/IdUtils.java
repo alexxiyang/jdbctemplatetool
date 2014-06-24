@@ -24,6 +24,10 @@ public class IdUtils {
 		Field[] allFields = po.getClass().getDeclaredFields();
 		for(Field f:allFields){
 			
+			if("serialVersionUID".equals(f.getName())){
+				continue;
+			}
+			
 			//获取getter方法
 			String getterName = "get" + CamelNameUtils.capitalize(f.getName());
 			Method getter = po.getClass().getDeclaredMethod(getterName);
