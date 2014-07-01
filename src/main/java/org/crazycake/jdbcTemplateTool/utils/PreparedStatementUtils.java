@@ -57,6 +57,10 @@ public class PreparedStatementUtils {
 		for (int i = 0; i < fields.length; i++) {
 			Field f = fields[i];
 			
+			if("serialVersionUID".equals(f.getName())){
+				continue;
+			}
+			
 			//获取具体参数值
 			Method getter = getGetter(po.getClass(), f);
 			
