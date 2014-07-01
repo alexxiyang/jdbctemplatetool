@@ -13,6 +13,8 @@ import org.crazycake.jdbcTemplateTool.model.CatalogContext;
 import org.crazycake.jdbcTemplateTool.model.SqlParamsPairs;
 import org.crazycake.jdbcTemplateTool.utils.IdUtils;
 import org.crazycake.jdbcTemplateTool.utils.PreparedStatementUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,6 +25,8 @@ import org.springframework.jdbc.support.KeyHolder;
 public class JdbcTemplateTool {
 
 	private JdbcTemplate jdbcTemplate;
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	/**
 	 * 用于可以指定需要动态切换的库名
@@ -66,6 +70,8 @@ public class JdbcTemplateTool {
 		
 		//动态切换库名
 		sql = JdbcTemplateTool.changeCatalog(sql);
+		
+		logger.debug("real sql: "+sql);
 		
 		List<T> list = null;
 		if (params == null || params.length == 0) {
