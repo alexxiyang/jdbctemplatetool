@@ -19,13 +19,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 /**
- * jdbcTemplate工具类
+ * Turn model to sql
  * @author Administrator
  *
  */
-public class PreparedStatementUtils {
+public class ModelSqlUtils {
 	
-	private static Logger logger = LoggerFactory.getLogger(PreparedStatementUtils.class);
+	private static Logger logger = LoggerFactory.getLogger(ModelSqlUtils.class);
 	
 	/**
 	 * 从po对象中分析出insert语句

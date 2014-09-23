@@ -12,7 +12,7 @@ import org.crazycake.jdbcTemplateTool.impl.ReturnIdPreparedStatementCreator;
 import org.crazycake.jdbcTemplateTool.model.CatalogContext;
 import org.crazycake.jdbcTemplateTool.model.SqlParamsPairs;
 import org.crazycake.jdbcTemplateTool.utils.IdUtils;
-import org.crazycake.jdbcTemplateTool.utils.PreparedStatementUtils;
+import org.crazycake.jdbcTemplateTool.utils.ModelSqlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -24,38 +24,23 @@ import org.springframework.jdbc.support.KeyHolder;
 
 public class JdbcTemplateTool {
 
-	private JdbcTemplate jdbcTemplate;
-	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	/**
-	 * 用于可以指定需要动态切换的库名
-	 */
-	private static final ThreadLocal<CatalogContext> catalogContextHolder = new ThreadLocal<CatalogContext>(){};
-
-	public static void setCatalogContext(String placeHolder,String catalog){
-		catalogContextHolder.set(new CatalogContext(placeHolder,catalog));
-	}
+	private JdbcTemplate jdbcTemplate;
 	
-	public static CatalogContext getCatalogContext(){
-		return catalogContextHolder.get();
-	}
+	//JdbcTemplateTool use proxy instead of directly use jdbcTemplate, cause it can do some AOP function in proxy. That makes code more clear.
+	private JdbcTemplateProxy _proxy;
 	
-	/**
-	 * 动态替换sql的catalog前缀
-	 * @param sql
-	 * @return
-	 */
-	public static String changeCatalog(String sql){
-		CatalogContext catalogContext = catalogContextHolder.get();
-		if(catalogContext != null && catalogContext.getCatalog() != null && catalogContext.getPlaceHolder() != null){
-			sql = sql.replace(catalogContext.getPlaceHolder(), catalogContext.getCatalog());
+	//return the singleton proxy
+	private JdbcTemplateProxy getProxy(){
+		if(_proxy == null){
+			_proxy = new JdbcTemplateProxy();
+			_proxy.setJdbcTemplate(jdbcTemplate);
 		}
-		return sql;
+		return _proxy;
 	}
 	
-	// ------------------------------- select
-	// -----------------------------------------//
+	// --------- select ------------//
 
 	/**
 	 * 获取对象列表
@@ -68,18 +53,15 @@ public class JdbcTemplateTool {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public <T> List<T> list(String sql, Object[] params, Class<T> clazz) {
 		
-		//动态切换库名
-		sql = JdbcTemplateTool.changeCatalog(sql);
-		
-		logger.debug("real sql: "+sql);
-		
+		//call jdbcTemplate to query for result
 		List<T> list = null;
 		if (params == null || params.length == 0) {
-			list = jdbcTemplate.query(sql, new BeanPropertyRowMapper(clazz));
+			list = getProxy().query(sql, new BeanPropertyRowMapper(clazz));
 		} else {
-			list = jdbcTemplate.query(sql, params, new BeanPropertyRowMapper(clazz));
+			list = getProxy().query(sql, params, new BeanPropertyRowMapper(clazz));
 		}
 		
+		//return list
 		return list;
 	}
 	
@@ -92,17 +74,14 @@ public class JdbcTemplateTool {
 	 * @return
 	 */
 	public int count(String sql, Object[] params) {
-		
-		//动态切换库名
-		sql = JdbcTemplateTool.changeCatalog(sql);
 				
 		int rowCount = 0;
 		try{
 			Map<String, Object> resultMap = null;
 			if (params == null || params.length == 0) {
-				resultMap = jdbcTemplate.queryForMap(sql);
+				resultMap = getProxy().queryForMap(sql);
 			} else {
-				resultMap = jdbcTemplate.queryForMap(sql, params);
+				resultMap = getProxy().queryForMap(sql, params);
 			}
 			Iterator<Map.Entry<String, Object>> it = resultMap.entrySet().iterator();
 			if(it.hasNext()){
@@ -130,14 +109,12 @@ public class JdbcTemplateTool {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public <T> T get(Class clazz, Object id) throws NoIdAnnotationFoundException, NoColumnAnnotationFoundException {
-
-		SqlParamsPairs sqlAndParams = PreparedStatementUtils.getGetFromObject(clazz, id);
 		
-		//动态切换库名
-		String sql = sqlAndParams.getSql();
-		sql = JdbcTemplateTool.changeCatalog(sql);
-				
-		List<T> list = this.list(sql, sqlAndParams.getParams(), clazz);
+		//turn class to sql
+		SqlParamsPairs sqlAndParams = ModelSqlUtils.getGetFromObject(clazz, id);
+		
+		//query for list
+		List<T> list = this.list(sqlAndParams.getSql(), sqlAndParams.getParams(), clazz);
 		if (list.size() > 0) {
 			return list.get(0);
 		} else {
@@ -154,13 +131,9 @@ public class JdbcTemplateTool {
 	 * @throws Exception
 	 */
 	public void update(Object po) throws Exception {
-		SqlParamsPairs sqlAndParams = PreparedStatementUtils.getUpdateFromObject(po);
-
-		//动态切换库名
-		String sql = sqlAndParams.getSql();
-		sql = JdbcTemplateTool.changeCatalog(sql);
-				
-		this.getJdbcTemplate().update(sql, sqlAndParams.getParams());
+		SqlParamsPairs sqlAndParams = ModelSqlUtils.getUpdateFromObject(po);
+		
+		getProxy().update(sqlAndParams.getSql(), sqlAndParams.getParams());
 	}
 	
 	/**
@@ -171,11 +144,9 @@ public class JdbcTemplateTool {
 	 */
 	public void batchUpdate(String sql,List<Object[]> paramsList){
 		
-		//动态切换库名
-		sql = JdbcTemplateTool.changeCatalog(sql);
-		
 		BatchUpdateSetter batchUpdateSetter = new BatchUpdateSetter(paramsList);
-		jdbcTemplate.batchUpdate(sql, batchUpdateSetter);
+		
+		getProxy().batchUpdate(sql, batchUpdateSetter);
 	}
 
 	/**
@@ -193,13 +164,9 @@ public class JdbcTemplateTool {
 			//把自增的主键值再设置回去
 			IdUtils.setAutoIncreamentIdValue(po,autoGeneratedColumnName,idValue);
 		}else{
-			SqlParamsPairs sqlAndParams = PreparedStatementUtils.getInsertFromObject(po);
+			SqlParamsPairs sqlAndParams = ModelSqlUtils.getInsertFromObject(po);
 			
-			//动态切换库名
-			String sql = sqlAndParams.getSql();
-			sql = JdbcTemplateTool.changeCatalog(sql);
-			
-			this.getJdbcTemplate().update(sql, sqlAndParams.getParams());
+			getProxy().update(sqlAndParams.getSql(), sqlAndParams.getParams());
 		}		
 	}
 	
@@ -213,28 +180,22 @@ public class JdbcTemplateTool {
 	 */
 	private int save(Object po, String autoGeneratedColumnName) throws Exception {
 
-		SqlParamsPairs sqlAndParams = PreparedStatementUtils.getInsertFromObject(po);
+		SqlParamsPairs sqlAndParams = ModelSqlUtils.getInsertFromObject(po);
 
 		//动态切换库名
 		String sql = sqlAndParams.getSql();
-		sql = JdbcTemplateTool.changeCatalog(sql);
 		
-		KeyHolder keyHolder = new GeneratedKeyHolder();
-		jdbcTemplate.update(new ReturnIdPreparedStatementCreator(sql, sqlAndParams.getParams(), autoGeneratedColumnName), keyHolder);
-
-		return keyHolder.getKey().intValue();
-
+		return getProxy().insert(sql, sqlAndParams.getParams(), autoGeneratedColumnName);
 	}
 	
 	//-------------------delete-----------------//
 	public void delete(Object po) throws Exception{
 		
-		SqlParamsPairs sqlAndParams = PreparedStatementUtils.getDeleteFromObject(po);
+		SqlParamsPairs sqlAndParams = ModelSqlUtils.getDeleteFromObject(po);
 		//动态切换库名
 		String sql = sqlAndParams.getSql();
-		sql = JdbcTemplateTool.changeCatalog(sql);
 		
-		jdbcTemplate.update(sql, sqlAndParams.getParams());	
+		getProxy().update(sql, sqlAndParams.getParams());	
 	}
 
 	public JdbcTemplate getJdbcTemplate() {
