@@ -47,16 +47,31 @@
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-test</artifactId>
 		<version>3.2.2.RELEASE</version>
+		<scope>test</scope>
 	</dependency>
 	<dependency>
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-core</artifactId>
 		<version>3.2.2.RELEASE</version>
+		<scope>test</scope>
 	</dependency>
 	<dependency>
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-context</artifactId>
 		<version>3.2.2.RELEASE</version>
+		<scope>test</scope>
+	</dependency>
+	<dependency>
+		<groupId>com.mchange</groupId>
+		<artifactId>c3p0</artifactId>
+		<version>0.9.2.1</version>
+		<scope>test</scope>
+	</dependency>
+	<dependency>
+		<groupId>mysql</groupId>
+		<artifactId>mysql-connector-java</artifactId>
+		<version>5.1.19</version>
+		<scope>test</scope>
 	</dependency>
   </dependencies>
   
