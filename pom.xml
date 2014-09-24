@@ -8,7 +8,10 @@
   <packaging>jar</packaging>
 
   <name>jdbctemplatetool</name>
-  <description>Add some helpful methods to jdbcTemplate</description>
+  <description>Spring JdbcTemplate did very convient and useful, but it also has some disadvantages or in another word “inconvenient”. 
+For example, you can’t just pass an object and tell JdbcTemplate to turn it into a sql and save to database just like hibernate does. Alright, you may say “JdbcTemplate doesn’t need you to write hbm.xml , so it’s understandable”. But is it true that this thing is impossible to achieve? 
+And also you know JdbcTemplate can auto turn the result of a query to a list of persistent object a.k.a PO, but when you want to do this you will meet a problem: “How to ?”.Because you can’t find any function of JdbcTemplate to pass a sql and a PO class as we expected. After you google for it, you’ve been told you can create a BeanPropertyRowMapper to deal with this. But isn’t it could be more easier? 
+Based on those questions I create JdbcTemplateTool which can provide these features.</description>
   <url>https://github.com/alexxiyang/jdbctemplatetool</url>
 
   <properties>

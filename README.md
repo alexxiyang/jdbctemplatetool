@@ -15,6 +15,7 @@ Based on those questions I create JdbcTemplateTool which can provide these featu
 - Auto generate the update sql and execute it with the PO you pass.
 - Batch update without care about implement BatchPreparedStatementSetter
 - Delete an object from database 
+- You can also use the original `JdbcTemplate`
 
 > Only tested on mysql for now.
 
@@ -351,6 +352,8 @@ public void testDelete() throws Exception {
 }
 ```
 
+##getJdbcTemplate
+You can also use the original `JdbcTemplate`. And there are many situation which **JdbcTemplateTool** can't handle with. In those situations  just call `JdbcTemplateTool.getJdbcTemplate()` to get `JdbcTemplate` and use the original methods of it.
 
 ##If you found any bugs
 Please send email to idante@qq.com
