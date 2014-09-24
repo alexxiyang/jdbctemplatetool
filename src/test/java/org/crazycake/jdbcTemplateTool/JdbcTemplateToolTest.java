@@ -26,7 +26,7 @@ public class JdbcTemplateToolTest extends AbstractJUnit4SpringContextTests{
 	public void testList() throws IOException, SQLException {
 		build();
 		JdbcTemplateTool jtt = super.applicationContext.getBean("jdbcTemplateTool",JdbcTemplateTool.class);
-		List<Employee> es = jtt.list("select * from employee where age > ? order by id desc", new Object[]{30}, Employee.class);
+		List<Employee> es = jtt.list("select * from employee where age < ? order by id desc", new Object[]{30}, Employee.class);
 		
 		assertThat(new Integer(es.size()),is(2));
 		

@@ -275,7 +275,7 @@ public class ModelSqlUtils {
 			//看有没有定义column
 			Column columnAnno = getter.getAnnotation(Column.class);
 			if(columnAnno == null){
-				throw new NoColumnAnnotationFoundException(getter);
+				throw new NoColumnAnnotationFoundException(clazz.getName(),getter);
 			}
 			//如果是列注解就读取name属性
 			String columnName = columnAnno.name();
@@ -343,7 +343,7 @@ public class ModelSqlUtils {
 			//看有没有定义column
 			Column columnAnno = getter.getAnnotation(Column.class);
 			if(columnAnno == null){
-				throw new NoColumnAnnotationFoundException(getter);
+				throw new NoColumnAnnotationFoundException(clazz.getName(),getter);
 			}
 			//如果是列注解就读取name属性
 			String columnName = columnAnno.name();
