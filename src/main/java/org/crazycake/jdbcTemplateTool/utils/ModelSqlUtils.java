@@ -347,6 +347,10 @@ public class ModelSqlUtils {
 			}
 			//如果是列注解就读取name属性
 			String columnName = columnAnno.name();
+			if(columnName == null || "".equals(columnName)){
+				//如果没有列注解就用命名方式去猜
+				columnName = CamelNameUtils.camel2underscore(f.getName());
+			}
 
 			getSql.append(columnName + " = ?");
 			
