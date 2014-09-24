@@ -1,4 +1,9 @@
 JdbcTemplateTool
 ================
 
-Add some helpful methods to jdbcTemplate
+Enhance JdbcTemplate
+
+Maven Dependency
+--------------
+
+
