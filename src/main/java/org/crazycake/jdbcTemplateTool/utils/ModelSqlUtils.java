@@ -81,7 +81,7 @@ public class ModelSqlUtils {
 			}
 			
 			//获取字段名
-			String columnName = getColumnName(getter,f.getName());
+			String columnName = getColumnNameFromGetter(getter, f);
 			
 			if(count!=0){
 				insertSql.append(",");
@@ -197,7 +197,7 @@ public class ModelSqlUtils {
 			}
 			
 			//获取字段名
-			String columnName = getColumnName(getter,f.getName());
+			String columnName = getColumnNameFromGetter(getter,f);
 			
 			//看看是不是主键
 			Id idAnno = getter.getAnnotation(Id.class);
@@ -273,12 +273,7 @@ public class ModelSqlUtils {
 			}
 			
 			//看有没有定义column
-			Column columnAnno = getter.getAnnotation(Column.class);
-			if(columnAnno == null){
-				throw new NoColumnAnnotationFoundException(clazz.getName(),getter);
-			}
-			//如果是列注解就读取name属性
-			String columnName = columnAnno.name();
+			String columnName = getColumnNameFromGetter(getter,f);
 
 			deleteSql.append(columnName + " = ?");
 			
@@ -340,17 +335,8 @@ public class ModelSqlUtils {
 				continue;
 			}
 			
-			//看有没有定义column
-			Column columnAnno = getter.getAnnotation(Column.class);
-			if(columnAnno == null){
-				throw new NoColumnAnnotationFoundException(clazz.getName(),getter);
-			}
-			//如果是列注解就读取name属性
-			String columnName = columnAnno.name();
-			if(columnName == null || "".equals(columnName)){
-				//如果没有列注解就用命名方式去猜
-				columnName = CamelNameUtils.camel2underscore(f.getName());
-			}
+			//get column name
+			String columnName = getColumnNameFromGetter(getter,f);
 
 			getSql.append(columnName + " = ?");
 			
@@ -369,26 +355,27 @@ public class ModelSqlUtils {
 	}
 	
 	/**
-	 * 获取字段名
+	 * use getter to guess column name, if there is annotation then use annotation value, if not then guess from field name
 	 * @param getter
-	 * @param fieldName
+	 * @param clazz
+	 * @param f
 	 * @return
+	 * @throws NoColumnAnnotationFoundException
 	 */
-	private static String getColumnName(Method getter,String fieldName){
+	private static String getColumnNameFromGetter(Method getter,Field f){
 		String columnName = "";
-		
 		Column columnAnno = getter.getAnnotation(Column.class);
-		if(columnAnno == null){
-			//如果没有注释就靠大小写推测字段名
-			columnName = CamelNameUtils.camel2underscore(fieldName);
-		}else{
+		if(columnAnno != null){
 			//如果是列注解就读取name属性
 			columnName = columnAnno.name();
 		}
+		
+		if(columnName == null || "".equals(columnName)){
+			//如果没有列注解就用命名方式去猜
+			columnName = CamelNameUtils.camel2underscore(f.getName());
+		}
 		return columnName;
 	}
-	
-	
 	
 	
 }
