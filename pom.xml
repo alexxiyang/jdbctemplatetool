@@ -25,7 +25,6 @@ Based on those questions I create JdbcTemplateTool which can provide these featu
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-	
   <dependencies>
   	<dependency>
 		<groupId>org.springframework</groupId>
