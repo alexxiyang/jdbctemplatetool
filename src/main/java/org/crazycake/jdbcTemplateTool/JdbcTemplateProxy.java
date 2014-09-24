@@ -40,7 +40,13 @@ public class JdbcTemplateProxy {
 		try{
 			return jdbcTemplate.query(sql, params, rowMapper);
 		}catch(DataAccessException e){
-			logger.error("Error SQL: " + sql);
+			StringBuilder sb = new StringBuilder();
+			sb.append("[");
+			for(Object p:params){
+				sb.append(p + " | ");
+			}
+			sb.append("]");
+			logger.error("Error SQL: " + sql + " Params: " + sb.toString());
 			throw e;
 		}
 	}
@@ -62,7 +68,13 @@ public class JdbcTemplateProxy {
 		try{
 			return jdbcTemplate.queryForMap(sql, params);
 		}catch(DataAccessException e){
-			logger.error("Error SQL: " + sql);
+			StringBuilder sb = new StringBuilder();
+			sb.append("[");
+			for(Object p:params){
+				sb.append(p + " | ");
+			}
+			sb.append("]");
+			logger.error("Error SQL: " + sql + " Params: " + sb.toString());
 			throw e;
 		}
 	}
@@ -74,7 +86,13 @@ public class JdbcTemplateProxy {
 		try{
 			return jdbcTemplate.update(sql, params);
 		}catch(DataAccessException e){
-			logger.error("Error SQL: " + sql);
+			StringBuilder sb = new StringBuilder();
+			sb.append("[");
+			for(Object p:params){
+				sb.append(p + " | ");
+			}
+			sb.append("]");
+			logger.error("Error SQL: " + sql + " Params: " + sb.toString());
 			throw e;
 		}	
 	}
@@ -108,7 +126,13 @@ public class JdbcTemplateProxy {
 		try{
 			jdbcTemplate.update(psc, keyHolder);
 		}catch(DataAccessException e){
-			logger.error("Error SQL: " + sql);
+			StringBuilder sb = new StringBuilder();
+			sb.append("[");
+			for(Object p:params){
+				sb.append(p + " | ");
+			}
+			sb.append("]");
+			logger.error("Error SQL: " + sql + " Params: " + sb.toString());
 			throw e;
 		}
 		
