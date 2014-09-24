@@ -1,6 +1,6 @@
 package org.crazycake.jdbcTemplateTool.utils;
 
-import java.lang.reflect.Field;
+	import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +14,9 @@ import org.crazycake.jdbcTemplateTool.exception.NoColumnAnnotationFoundException
 import org.crazycake.jdbcTemplateTool.exception.NoDefinedGetterException;
 import org.crazycake.jdbcTemplateTool.exception.NoIdAnnotationFoundException;
 import org.crazycake.jdbcTemplateTool.model.SqlParamsPairs;
+import org.crazycake.utils.CamelNameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
 /**
  * Turn model to sql
@@ -114,7 +114,7 @@ public class ModelSqlUtils {
 	 * @return
 	 */
 	private static <T> Method getGetter(Class<T> clazz, Field f){
-		String getterName = "get" + StringUtils.capitalize(f.getName());
+		String getterName = "get" + CamelNameUtils.capitalize(f.getName());
 		Method getter = null;
 		try {
 			getter = clazz.getMethod(getterName);
