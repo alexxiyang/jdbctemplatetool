@@ -64,7 +64,7 @@ public class JdbcTemplateToolTest extends AbstractJUnit4SpringContextTests{
 		Employee e = jtt.get(Employee.class, 1);
 		e.setAge(23);
 		jtt.update(e);
-		ScaffoldUnit.dbAssertThat("select age from employee where name='jakc'", is(23));
+		ScaffoldUnit.dbAssertThat("select age from employee where name='jack'", is(23));
 	}
 
 	@Test
