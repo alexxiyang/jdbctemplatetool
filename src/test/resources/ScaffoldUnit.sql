@@ -8,10 +8,19 @@ CREATE TABLE `employee` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `student2`;
+DROP TABLE IF EXISTS `person2`;
 
-CREATE TABLE `student2` (
+CREATE TABLE `person2` (
   `id` int(11) NOT NULL,
-  `student_name` varchar(300) NOT NULL,
+  `person_name` varchar(300) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `student`;
+
+CREATE TABLE `student` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(32) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

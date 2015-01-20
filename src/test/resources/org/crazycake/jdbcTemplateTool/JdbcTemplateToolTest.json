@@ -196,7 +196,7 @@
             "n":"testGet2",
             "ts":[
                 {
-                    "t":"student2",
+                    "t":"person2",
                     "rs":[
                         [
                             {
@@ -204,7 +204,7 @@
                                 "v":"1"
                             },
                             {
-                                "c":"student_name",
+                                "c":"person_name",
                                 "v":"'jackie'"
                             }
                         ]                       
@@ -298,6 +298,50 @@
                             {
                                 "c":"age",
                                 "v":"27"
+                            }
+                        ]                       
+                    ]
+                }
+            ]
+        },
+        {
+            "n":"testSave",
+            "ts":[
+                {
+                    "t":"employee"
+                }
+            ]
+        },
+        {
+            "n":"testSaveWithoutSomeField",
+            "ts":[
+                {
+                    "t":"student"
+                }
+            ]
+        },
+        {
+            "n":"testBatchUpdate",
+            "ts":[
+                {
+                    "t":"employee",
+                    "rs":[
+                        [
+                            {
+                                "c":"id",
+                                "v":"1"
+                            },
+                            {
+                                "c":"name",
+                                "v":"'jack'"
+                            },
+                            {
+                                "c":"join_date",
+                                "v":"'2014-09-22'"
+                            },
+                            {
+                                "c":"age",
+                                "v":"32"
                             }
                         ]                       
                     ]

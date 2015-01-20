@@ -1,18 +1,23 @@
 package org.crazycake.jdbcTemplateTool;
 
 import static org.crazycake.ScaffoldUnit.ScaffoldUnit.build;
+import static org.crazycake.ScaffoldUnit.ScaffoldUnit.dbAssertThat;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.crazycake.ScaffoldUnit.ScaffoldUnit;
 import org.crazycake.jdbcTemplateTool.exception.NoColumnAnnotationFoundException;
 import org.crazycake.jdbcTemplateTool.exception.NoIdAnnotationFoundException;
 import org.crazycake.jdbcTemplateTool.model.Employee;
+import org.crazycake.jdbcTemplateTool.model.Person;
 import org.crazycake.jdbcTemplateTool.model.Student;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
@@ -61,7 +66,7 @@ public class JdbcTemplateToolTest extends AbstractJUnit4SpringContextTests{
         
         JdbcTemplateTool jtt = super.applicationContext.getBean("jdbcTemplateTool",JdbcTemplateTool.class);
         
-        Employee e = jtt.get(Student.class, 1);
+        Employee e = jtt.get(Person.class, 1);
         assertThat(e.getName(),is("jackie"));
     }
 
@@ -95,14 +100,47 @@ public class JdbcTemplateToolTest extends AbstractJUnit4SpringContextTests{
 		ScaffoldUnit.dbAssertThat("select age from employee where name='tim'", is(29));
 	}
 
-//	@Test
-//	public void testSave() {
-//		fail("Not yet implemented");
-//	}
-//
-//	@Test
-//	public void testDelete() {
-//		fail("Not yet implemented");
-//	}
+	@Test
+	public void testSave() throws Exception {
+		build();
+		
+		JdbcTemplateTool jtt = super.applicationContext.getBean("jdbcTemplateTool",JdbcTemplateTool.class);
+		
+		Employee e = new Employee();
+		e.setId(4);
+		e.setName("billy");
+		Date now = new Date();
+		e.setJoinDate(new Timestamp(now.getTime()));
+		e.setAge(33);
+		
+		jtt.save(e);
+		
+		dbAssertThat("select name from employee where id=4", is("billy"));
+	}
+	
+	@Test
+	public void testSaveWithoutSomeField() throws Exception {
+		build();
+		
+		JdbcTemplateTool jtt = super.applicationContext.getBean("jdbcTemplateTool",JdbcTemplateTool.class);
+		
+		Student s = new Student();
+		s.setName("michael");
+		s.setNothing("nothing");
+		jtt.save(s);
+		
+		dbAssertThat("select name from student where name = 'michael'", is("michael"));
+	}
+
+	@Test
+	public void testDelete() throws Exception {
+		build();
+		
+		JdbcTemplateTool jtt = super.applicationContext.getBean("jdbcTemplateTool",JdbcTemplateTool.class);
+		Employee e = new Employee();
+		e.setId(1);
+		jtt.delete(e);
+		dbAssertThat("select name from employee where id=1", nullValue());
+	}
 
 }

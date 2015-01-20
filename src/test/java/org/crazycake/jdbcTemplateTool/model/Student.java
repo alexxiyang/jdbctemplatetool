@@ -1,24 +1,19 @@
 package org.crazycake.jdbcTemplateTool.model;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.Transient;
 
-@Table(name="student2")
 public class Student {
+	
 	private Integer id;
 	private String name;
+	private String nothing;
 	
-	@Id
-	@Column
 	public Integer getId() {
 		return id;
 	}
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
-	@Column(name="student_name")
 	public String getName() {
 		return name;
 	}
@@ -26,4 +21,12 @@ public class Student {
 		this.name = name;
 	}
 	
+	@Transient
+	public String getNothing() {
+		return nothing;
+	}
+	public void setNothing(String nothing) {
+		this.nothing = nothing;
+	}
 }
+
