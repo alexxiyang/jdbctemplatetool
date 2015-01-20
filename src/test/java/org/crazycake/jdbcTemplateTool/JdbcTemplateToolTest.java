@@ -65,6 +65,8 @@ public class JdbcTemplateToolTest extends AbstractJUnit4SpringContextTests{
         build();
         
         JdbcTemplateTool jtt = super.applicationContext.getBean("jdbcTemplateTool",JdbcTemplateTool.class);
+        List<Person> personList = jtt.list("select * from person2", null, Person.class);
+        assertThat(personList.size(),is(1));
         
         Person e = jtt.get(Person.class, 1);
         assertThat(e.getName(),is("jackie"));
