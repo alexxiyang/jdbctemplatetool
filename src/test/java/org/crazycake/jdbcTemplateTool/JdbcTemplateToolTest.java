@@ -1,20 +1,19 @@
 package org.crazycake.jdbcTemplateTool;
 
-import static org.junit.Assert.fail;
+import static org.crazycake.ScaffoldUnit.ScaffoldUnit.build;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
-import static org.crazycake.ScaffoldUnit.ScaffoldUnit.*;
-
 import org.crazycake.ScaffoldUnit.ScaffoldUnit;
 import org.crazycake.jdbcTemplateTool.exception.NoColumnAnnotationFoundException;
 import org.crazycake.jdbcTemplateTool.exception.NoIdAnnotationFoundException;
 import org.crazycake.jdbcTemplateTool.model.Employee;
+import org.crazycake.jdbcTemplateTool.model.Student;
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
@@ -54,6 +53,17 @@ public class JdbcTemplateToolTest extends AbstractJUnit4SpringContextTests{
 		Employee e = jtt.get(Employee.class, 3);
 		assertThat(e.getName(),is("jacob"));
 	}
+	
+	@Test
+    public void testGet2() throws NoIdAnnotationFoundException, NoColumnAnnotationFoundException, IOException, SQLException {
+        
+        build();
+        
+        JdbcTemplateTool jtt = super.applicationContext.getBean("jdbcTemplateTool",JdbcTemplateTool.class);
+        
+        Employee e = jtt.get(Student.class, 1);
+        assertThat(e.getName(),is("jackie"));
+    }
 
 	@Test
 	public void testUpdate() throws Exception {

@@ -193,6 +193,26 @@
             ]
         },
         {
+            "n":"testGet2",
+            "ts":[
+                {
+                    "t":"student2",
+                    "rs":[
+                        [
+                            {
+                                "c":"id",
+                                "v":"1"
+                            },
+                            {
+                                "c":"student_name",
+                                "v":"'jackie'"
+                            }
+                        ]                       
+                    ]
+                }
+            ]
+        },
+        {
             "n":"testUpdate",
             "ts":[
                 {
