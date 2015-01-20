@@ -193,26 +193,6 @@
             ]
         },
         {
-            "n":"testGet2",
-            "ts":[
-                {
-                    "t":"person2",
-                    "rs":[
-                        [
-                            {
-                                "c":"id",
-                                "v":"1"
-                            },
-                            {
-                                "c":"person_name",
-                                "v":"'jackie'"
-                            }
-                        ]                       
-                    ]
-                }
-            ]
-        },
-        {
             "n":"testUpdate",
             "ts":[
                 {

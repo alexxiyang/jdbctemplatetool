@@ -17,18 +17,14 @@ import org.crazycake.ScaffoldUnit.ScaffoldUnit;
 import org.crazycake.jdbcTemplateTool.exception.NoColumnAnnotationFoundException;
 import org.crazycake.jdbcTemplateTool.exception.NoIdAnnotationFoundException;
 import org.crazycake.jdbcTemplateTool.model.Employee;
-import org.crazycake.jdbcTemplateTool.model.Person;
 import org.crazycake.jdbcTemplateTool.model.Student;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 @ContextConfiguration(locations={"classpath:spring.xml"})
 public class JdbcTemplateToolTest extends AbstractJUnit4SpringContextTests{
 
-    private static Logger logger = LoggerFactory.getLogger(JdbcTemplateToolTest.class);
     
 	@Test
 	public void testList() throws IOException, SQLException {
@@ -62,20 +58,7 @@ public class JdbcTemplateToolTest extends AbstractJUnit4SpringContextTests{
 		Employee e = jtt.get(Employee.class, 3);
 		assertThat(e.getName(),is("jacob"));
 	}
-	
-	@Test
-    public void testGet2() throws NoIdAnnotationFoundException, NoColumnAnnotationFoundException, IOException, SQLException {
-        
-        build();
-        
-        JdbcTemplateTool jtt = super.applicationContext.getBean("jdbcTemplateTool",JdbcTemplateTool.class);
-        List<Person> personList = jtt.list("select * from person2", null, Person.class);
-        assertThat(personList.size(),is(1));
-        logger.info(personList.get(0).getName());
-        
-        Person e = jtt.get(Person.class, 1);
-        assertThat(e.getName(),is("jackie"));
-    }
+
 
 	@Test
 	public void testUpdate() throws Exception {
