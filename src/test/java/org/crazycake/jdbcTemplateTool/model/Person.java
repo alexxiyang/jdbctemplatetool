@@ -7,12 +7,11 @@ import javax.persistence.Table;
 @Table(name="person2")
 public class Person {
     
-    @Id
     private Integer id;
     
-    @Column(name="person_name")
     private String name;
 
+    @Id
     public Integer getId() {
         return id;
     }
@@ -21,6 +20,7 @@ public class Person {
         this.id = id;
     }
 
+    @Column(name="person_name")
     public String getName() {
         return name;
     }
