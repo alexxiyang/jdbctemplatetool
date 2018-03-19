@@ -10,11 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.crazycake.jdbcTemplateTool.exception.NoColumnAnnotationFoundException;
+	import org.apache.commons.lang3.StringUtils;
+	import org.crazycake.jdbcTemplateTool.exception.NoColumnAnnotationFoundException;
 import org.crazycake.jdbcTemplateTool.exception.NoDefinedGetterException;
 import org.crazycake.jdbcTemplateTool.exception.NoIdAnnotationFoundException;
 import org.crazycake.jdbcTemplateTool.model.SqlParamsPairs;
-import org.crazycake.utils.CamelNameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -114,7 +114,7 @@ public class ModelSqlUtils {
 	 * @return
 	 */
 	private static <T> Method getGetter(Class<T> clazz, Field f){
-		String getterName = "get" + CamelNameUtils.capitalize(f.getName());
+		String getterName = "get" + StringUtils.capitalize(f.getName());
 		Method getter = null;
 		try {
 			getter = clazz.getMethod(getterName);
@@ -126,7 +126,6 @@ public class ModelSqlUtils {
 
 	/**
 	 * 从po类获取表名
-	 * @param po
 	 * @return
 	 */
 	private static <T> String getTableName(Class<T> clazz) {
@@ -140,7 +139,7 @@ public class ModelSqlUtils {
 		}
 		//if Table annotation is null
 		String className = clazz.getName();
-		return CamelNameUtils.camel2underscore(className.substring(className.lastIndexOf(".")+1));
+		return IdUtils.toUnderscore(className.substring(className.lastIndexOf(".")+1));
 	}
 	
 	
@@ -296,7 +295,6 @@ public class ModelSqlUtils {
 	
 	/**
 	 * 获取根据主键查对象的sql和参数
-	 * @param po
 	 * @param id
 	 * @return
 	 * @throws NoIdAnnotationFoundException 
@@ -357,7 +355,6 @@ public class ModelSqlUtils {
 	/**
 	 * use getter to guess column name, if there is annotation then use annotation value, if not then guess from field name
 	 * @param getter
-	 * @param clazz
 	 * @param f
 	 * @return
 	 * @throws NoColumnAnnotationFoundException
@@ -372,7 +369,7 @@ public class ModelSqlUtils {
 		
 		if(columnName == null || "".equals(columnName)){
 			//如果没有列注解就用命名方式去猜
-			columnName = CamelNameUtils.camel2underscore(f.getName());
+			columnName = IdUtils.toUnderscore(f.getName());
 		}
 		return columnName;
 	}

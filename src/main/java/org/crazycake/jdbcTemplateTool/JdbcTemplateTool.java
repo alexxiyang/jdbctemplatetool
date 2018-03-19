@@ -74,7 +74,6 @@ public class JdbcTemplateTool {
 	 * get count
 	 * @param sql
 	 * @param params
-	 * @param clazz
 	 * @return
 	 */
 	public int count(String sql, Object[] params) {
@@ -103,8 +102,6 @@ public class JdbcTemplateTool {
 	/**
 	 * 获取一个对象
 	 * get object by id
-	 * @param sql
-	 * @param params
 	 * @param clazz
 	 * @return
 	 * @throws NoIdAnnotationFoundException

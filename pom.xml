@@ -87,11 +87,19 @@ Based on those questions I create JdbcTemplateTool which can provide these featu
 		<version>5.1.19</version>
 		<scope>test</scope>
 	</dependency>
+
 	<dependency>
-		<groupId>org.crazycake</groupId>
-		<artifactId>camel-name-utils</artifactId>
-		<version>1.0.0-RELEASE</version>
+	  <groupId>com.google.guava</groupId>
+	  <artifactId>guava</artifactId>
+	  <version>19.0</version>
 	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+	<dependency>
+	  <groupId>org.apache.commons</groupId>
+	  <artifactId>commons-lang3</artifactId>
+	  <version>3.7</version>
+	</dependency>
+
   </dependencies>
   
   <developers>
