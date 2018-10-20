@@ -16,6 +16,7 @@ Based on those questions I create JdbcTemplateTool which can provide these featu
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <springVersion>3.2.15</springVersion>
   </properties>
 
 	<licenses>
@@ -29,7 +30,7 @@ Based on those questions I create JdbcTemplateTool which can provide these featu
   	<dependency>
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-orm</artifactId>
-		<version>3.2.2.RELEASE</version>
+		<version>${springVersion}</version>
 	</dependency>
 	<dependency>
 		<groupId>javax.persistence</groupId>
@@ -61,18 +62,18 @@ Based on those questions I create JdbcTemplateTool which can provide these featu
     <dependency>
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-test</artifactId>
-		<version>3.2.2.RELEASE</version>
+		<version>${springVersion}</version>
 		<scope>test</scope>
 	</dependency>
 	<dependency>
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-core</artifactId>
-		<version>3.2.2.RELEASE</version>
+		<version>${springVersion}</version>
 	</dependency>
 	<dependency>
 		<groupId>org.springframework</groupId>
 		<artifactId>spring-context</artifactId>
-		<version>3.2.2.RELEASE</version>
+		<version>${springVersion}</version>
 		<scope>test</scope>
 	</dependency>
 	<dependency>
