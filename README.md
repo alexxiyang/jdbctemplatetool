@@ -1,3 +1,5 @@
+> This repo is deprecated!
+
 JdbcTemplateTool
 ============
 
